@@ -1,0 +1,2049 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)file:///C:/Users/photo/Downloads/finance-course-premium.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wealth Path — Paycheck to Portfolio</title>
+    <link href="./index_files/css2" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --secondary: #004E89;
+            --accent: #F7B801;
+            --success: #06A77D;
+            --bg-dark: #0A0E27;
+            --bg-card: #151932;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B8C5D6;
+            --text-muted: #6B7A8F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app {
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Animated background */
+        .app::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 78, 137, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(247, 184, 1, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: rgba(21, 25, 50, 0.8);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 2.5rem 2rem;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            width: 360px;
+            left: 0;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            margin-bottom: 3rem;
+        }
+
+        .brand h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .brand p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .modules {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .module {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--module-color) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .module:hover::before {
+            opacity: 0.08;
+        }
+
+        .module.active {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--module-color);
+            transform: translateX(4px);
+        }
+
+        .module.active::before {
+            opacity: 0.12;
+        }
+
+        .module.locked {
+            opacity: 0.5;
+        }
+
+        .module-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .module-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, var(--module-color), rgba(255, 255, 255, 0.1));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .module-info h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .module-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .module-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: var(--bg-dark);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.35rem 0.75rem;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            z-index: 2;
+        }
+
+        .progress-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 0.75rem 0 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--module-color), rgba(255, 255, 255, 0.3));
+            border-radius: 3px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4));
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-40px); }
+            100% { transform: translateX(100px); }
+        }
+
+        .lesson-count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lesson-count::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .price-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--module-color);
+            font-size: 0.95rem;
+        }
+
+        /* Main content area */
+        .main {
+            margin-left: 360px;
+            padding: 3rem 4rem;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .lesson {
+            background: rgba(21, 25, 50, 0.6);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .lesson-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-header h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .lesson-intro {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            font-style: italic;
+            font-family: 'Fraunces', serif;
+        }
+
+        .content-section {
+            margin: 3rem 0;
+        }
+
+        .section-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 32px;
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+
+        /* Interactive calculator */
+        .interactive-calc {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(247, 184, 1, 0.1));
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .calc-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .calc-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .calc-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .calc-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.875rem 1.25rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .calc-result {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .result-label {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .result-value {
+            font-family: 'Fraunces', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--success), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Visual comparison */
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .comparison-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .comparison-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--card-color), transparent);
+        }
+
+        .comparison-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .comparison-value {
+            font-family: 'Fraunces', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--card-color);
+            margin-bottom: 1rem;
+        }
+
+        .comparison-desc {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Term cards */
+        .term-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .term-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeIn 0.6s backwards;
+        }
+
+        .term-card:nth-child(1) { animation-delay: 0.1s; }
+        .term-card:nth-child(2) { animation-delay: 0.2s; }
+        .term-card:nth-child(3) { animation-delay: 0.3s; }
+        .term-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .term-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+        }
+
+        .term-name {
+            font-family: 'Fraunces', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .term-definition {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Scrollbar */
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 3px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* CTA Button */
+        .cta-btn {
+            width: 100%;
+            padding: 1.25rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            border-radius: 14px;
+            color: var(--bg-dark);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 36px rgba(255, 107, 53, 0.4);
+        }
+
+        .cta-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Lesson Navigation */
+        .lesson-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(21, 25, 50, 0.6);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+        }
+
+        .nav-btn {
+            padding: 0.875rem 1.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .nav-btn:hover:not(.disabled) {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .lesson-progress {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+        }
+
+        @media (max-width: 968px) {
+            .app {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            .main {
+                margin-left: 0;
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+                <div class="app">
+                    
+                <div class="sidebar">
+                    <div class="brand">
+                        <h1>Wealth Path</h1>
+                        <p>Paycheck to Portfolio — Transform your finances in 90 days</p>
+                    </div>
+                    <div class="modules">
+                        
+                <div class="module active " style="--module-color: #06A77D" onclick="selectModule(&#39;welcome&#39;, false)">
+                    
+                    <div class="module-header">
+                        <div class="module-icon">👋</div>
+                        <div class="module-info">
+                            <h3>Welcome</h3>
+                            <p>Start here</p>
+                        </div>
+                    </div>
+                    
+                        <div class="progress-wrapper">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="lesson-count">0 of 1 complete</div>
+                        </div>
+                    
+                </div>
+            
+                <div class="module  " style="--module-color: #FF6B35" onclick="selectModule(&#39;basics&#39;, false)">
+                    
+                    <div class="module-header">
+                        <div class="module-icon">💰</div>
+                        <div class="module-info">
+                            <h3>Money Foundations</h3>
+                            <p>Free • 5 deep lessons</p>
+                        </div>
+                    </div>
+                    
+                        <div class="progress-wrapper">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="lesson-count">0 of 5 complete</div>
+                        </div>
+                    
+                </div>
+            
+                <div class="module  " style="--module-color: #06A77D" onclick="selectModule(&#39;money&#39;, false)">
+                    
+                    <div class="module-header">
+                        <div class="module-icon">🌱</div>
+                        <div class="module-info">
+                            <h3>Growing Your Money</h3>
+                            <p>Free • 4 deep lessons</p>
+                        </div>
+                    </div>
+                    
+                        <div class="progress-wrapper">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="lesson-count">0 of 4 complete</div>
+                        </div>
+                    
+                </div>
+            
+                    </div>
+                    
+                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <h3 style="color: var(--accent); font-size: 0.95rem; margin-bottom: 1rem; font-weight: 700;">📥 PDF TOOLKITS</h3>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <a href="file:///C:/Users/photo/Downloads/WealthPath-01-30-Day-Expense-Tracker.pdf" download="" style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background=&#39;rgba(255,255,255,0.08)&#39;" onmouseout="this.style.background=&#39;rgba(255,255,255,0.03)&#39;">
+                                📅 Expense Tracker
+                            </a>
+                            <a href="file:///C:/Users/photo/Downloads/WealthPath-02-50-30-20-Budget-Worksheet.pdf" download="" style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background=&#39;rgba(255,255,255,0.08)&#39;" onmouseout="this.style.background=&#39;rgba(255,255,255,0.03)&#39;">
+                                💰 Budget Worksheet
+                            </a>
+                            <a href="file:///C:/Users/photo/Downloads/WealthPath-03-Emergency-Fund-Tracker.pdf" download="" style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background=&#39;rgba(255,255,255,0.08)&#39;" onmouseout="this.style.background=&#39;rgba(255,255,255,0.03)&#39;">
+                                🛡️ Emergency Fund
+                            </a>
+                            <a href="file:///C:/Users/photo/Downloads/WealthPath-04-Debt-Payoff-Planner.pdf" download="" style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background=&#39;rgba(255,255,255,0.08)&#39;" onmouseout="this.style.background=&#39;rgba(255,255,255,0.03)&#39;">
+                                ⚡ Debt Planner
+                            </a>
+                            <a href="file:///C:/Users/photo/Downloads/WealthPath-05-Credit-Score-Action-Plan.pdf" download="" style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background=&#39;rgba(255,255,255,0.08)&#39;" onmouseout="this.style.background=&#39;rgba(255,255,255,0.03)&#39;">
+                                📈 Credit Score Plan
+                            </a>
+                            <a href="file:///C:/Users/photo/Downloads/WealthPath-06-Investment-Account-Setup-Checklist.pdf" download="" style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background=&#39;rgba(255,255,255,0.08)&#39;" onmouseout="this.style.background=&#39;rgba(255,255,255,0.03)&#39;">
+                                🎯 Investment Setup
+                            </a>
+                            <a href="file:///C:/Users/photo/Downloads/WealthPath-07-Retirement-Projection-Workbook.pdf" download="" style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background=&#39;rgba(255,255,255,0.08)&#39;" onmouseout="this.style.background=&#39;rgba(255,255,255,0.03)&#39;">
+                                🏖️ Retirement Projector
+                            </a>
+                            <a href="file:///C:/Users/photo/Downloads/WealthPath-08-90-Day-Wealth-Sprint.pdf" download="" style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background=&#39;rgba(255,255,255,0.08)&#39;" onmouseout="this.style.background=&#39;rgba(255,255,255,0.03)&#39;">
+                                🚀 90-Day Sprint
+                            </a>
+                            <a href="file:///C:/Users/photo/Downloads/WealthPath-09-Tax-Deduction-Checklist.pdf" download="" style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background=&#39;rgba(255,255,255,0.08)&#39;" onmouseout="this.style.background=&#39;rgba(255,255,255,0.03)&#39;">
+                                📋 Tax Deductions
+                            </a>
+                            <a href="file:///C:/Users/photo/Downloads/WealthPath-10-Business-Expense-Tracker.pdf" download="" style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background=&#39;rgba(255,255,255,0.08)&#39;" onmouseout="this.style.background=&#39;rgba(255,255,255,0.03)&#39;">
+                                💼 Business Tracker
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            
+                    
+                <div class="main">
+                    
+                    
+                    <div class="lesson">
+                        <div class="lesson-header">
+                            <div class="lesson-meta">
+                                <div class="meta-badge">
+                                    <span>⏱</span>
+                                    6 min
+                                </div>
+                                <div class="meta-badge">
+                                    <span>👋</span>
+                                    Welcome
+                                </div>
+                            </div>
+                            <h2>Your Financial Transformation Starts Now</h2>
+                            <p class="lesson-intro">Here's the truth nobody tells you: Building wealth isn't about making six figures or finding the perfect stock. It's about understanding a few fundamental principles and actually applying them. You're about to learn exactly what wealthy people know.</p>
+                        </div>
+
+                        
+                        <div class="content-section">
+                            <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary);">
+                                Most people never learn this stuff. They spend 12+ years in school learning algebra and Shakespeare, but nobody teaches them how to actually build wealth. That changes today.
+                            </p>
+                        </div>
+                    
+                        <div class="content-section">
+                            <h3 class="section-title">What You'll Master</h3>
+                            <div class="term-grid">
+                                
+                                    <div class="term-card">
+                                        <div class="term-name">✓</div>
+                                        <div class="term-definition">How to make every dollar work harder for you (not just 'save more')</div>
+                                    </div>
+                                
+                                    <div class="term-card">
+                                        <div class="term-name">✓</div>
+                                        <div class="term-definition">The exact system millionaires use to build wealth (it's simpler than you think)</div>
+                                    </div>
+                                
+                                    <div class="term-card">
+                                        <div class="term-name">✓</div>
+                                        <div class="term-definition">How to never worry about money again (real financial security)</div>
+                                    </div>
+                                
+                                    <div class="term-card">
+                                        <div class="term-name">✓</div>
+                                        <div class="term-definition">The compounding secrets that turn small amounts into fortunes</div>
+                                    </div>
+                                
+                            </div>
+                        </div>
+                    
+
+                        <button class="cta-btn" onclick="completeLesson()">
+                            <span>Complete Lesson ✓</span>
+                        </button>
+                    </div>
+                </div>
+            
+                </div>
+            </div>
+
+    <script>
+        const state = {
+            activeModule: 'welcome',
+            activeLesson: 0,
+            unlockedModules: ['welcome', 'basics', 'money'],
+            completedLessons: []
+        };
+
+        const courseData = {
+            welcome: {
+                title: "Welcome",
+                subtitle: "Start here",
+                color: "#06A77D",
+                emoji: "👋",
+                free: true,
+                lessons: [{
+                    title: "Your Financial Transformation Starts Now",
+                    duration: "6 min",
+                    intro: "Here's the truth nobody tells you: Building wealth isn't about making six figures or finding the perfect stock. It's about understanding a few fundamental principles and actually applying them. You're about to learn exactly what wealthy people know.",
+                    sections: [
+                        {
+                            type: "text",
+                            content: "Most people never learn this stuff. They spend 12+ years in school learning algebra and Shakespeare, but nobody teaches them how to actually build wealth. That changes today."
+                        },
+                        {
+                            type: "promise",
+                            title: "What You'll Master",
+                            points: [
+                                "How to make every dollar work harder for you (not just 'save more')",
+                                "The exact system millionaires use to build wealth (it's simpler than you think)",
+                                "How to never worry about money again (real financial security)",
+                                "The compounding secrets that turn small amounts into fortunes"
+                            ]
+                        }
+                    ]
+                }]
+            },
+            basics: {
+                title: "Money Foundations",
+                subtitle: "Free • 5 deep lessons",
+                color: "#FF6B35",
+                emoji: "💰",
+                free: true,
+                lessons: [
+                    {
+                        title: "The $1,200 Coffee Problem",
+                        duration: "12 min",
+                        intro: "Before we talk about investing or retirement, we need to fix the leak in your financial boat. Most people are hemorrhaging thousands of dollars annually without even realizing it.",
+                        sections: [
+                            {
+                                type: "calculator",
+                                id: "coffee-calc",
+                                title: "Your Daily Expense Impact Calculator",
+                                inputs: [
+                                    { id: "daily-cost", label: "Daily Cost ($)", value: 5, type: "number" },
+                                    { id: "days-per-week", label: "Days per Week", value: 5, type: "number" }
+                                ],
+                                calculate: (inputs) => {
+                                    const daily = parseFloat(inputs['daily-cost']) || 0;
+                                    const days = parseFloat(inputs['days-per-week']) || 0;
+                                    const weekly = daily * days;
+                                    const monthly = weekly * 4.33;
+                                    const yearly = monthly * 12;
+                                    const tenYear = yearly * 10;
+                                    const invested = yearly * ((Math.pow(1.08, 10) - 1) / 0.08);
+                                    return {
+                                        yearly,
+                                        tenYear,
+                                        invested
+                                    };
+                                }
+                            },
+                            {
+                                type: "comparison",
+                                title: "The Real Cost of 'Small' Purchases",
+                                cards: [
+                                    {
+                                        label: "Just Spend It",
+                                        value: "$1,200",
+                                        desc: "That's your $5 daily coffee for one year. Feels small, right?",
+                                        color: "#FF6B35"
+                                    },
+                                    {
+                                        label: "10 Years Later",
+                                        value: "$12,000",
+                                        desc: "Same coffee habit. Now it's a used car. Still feel small?",
+                                        color: "#F7B801"
+                                    },
+                                    {
+                                        label: "If You Invested It",
+                                        value: "$17,400",
+                                        desc: "At 8% annual return. Your coffee could've been a down payment on a house.",
+                                        color: "#06A77D"
+                                    }
+                                ]
+                            },
+                            {
+                                type: "terms",
+                                title: "Essential Vocabulary",
+                                terms: [
+                                    {
+                                        term: "Income",
+                                        definition: "Every dollar that flows into your life - salary, side hustles, gifts, tax refunds, everything. If money arrives in your account, it's income."
+                                    },
+                                    {
+                                        term: "Fixed Expenses",
+                                        definition: "The bills that hit every single month like clockwork: rent/mortgage, car payment, insurance, phone, subscriptions. These are your 'non-negotiables.'"
+                                    },
+                                    {
+                                        term: "Variable Expenses",
+                                        definition: "The wild cards: groceries, gas, eating out, entertainment. These change month-to-month and are where you have the most control."
+                                    },
+                                    {
+                                        term: "Cash Flow",
+                                        definition: "Income minus all expenses. Positive cash flow = you're building wealth. Negative = you're going backwards. It really is that simple."
+                                    }
+                                ]
+                            },
+                            {
+                                type: "text",
+                                content: "Here's what most people don't realize: Tracking isn't about guilt or restriction. It's about awareness. You can't fix what you can't see. Over the next week, write down every single purchase. Not to judge yourself - just to understand where your money actually goes. Most people are shocked to discover they're spending $300-500/month on things they barely remember buying."
+                            }
+                        ]
+                    },
+                    {
+                        title: "The Budget That Actually Works",
+                        duration: "14 min",
+                        intro: "Forget complicated spreadsheets with 47 categories. The 50/30/20 framework is used by millionaires because it's simple enough to actually follow and flexible enough to fit any lifestyle.",
+                        sections: [
+                            {
+                                type: "calculator",
+                                id: "budget-calc",
+                                title: "Your 50/30/20 Budget Calculator",
+                                inputs: [
+                                    { id: "monthly-income", label: "Monthly Take-Home ($)", value: 3500, type: "number" }
+                                ],
+                                calculate: (inputs) => {
+                                    const income = parseFloat(inputs['monthly-income']) || 0;
+                                    const needs = income * 0.50;
+                                    const wants = income * 0.30;
+                                    const savings = income * 0.20;
+                                    return {
+                                        yearly: income * 12,
+                                        needs,
+                                        wants,
+                                        savings,
+                                        savingsYear: savings * 12
+                                    };
+                                }
+                            },
+                            {
+                                type: "comparison",
+                                title: "How $3,500 Monthly Income Breaks Down",
+                                cards: [
+                                    {
+                                        label: "NEEDS (50%)",
+                                        value: "$1,750",
+                                        desc: "Rent, utilities, groceries, insurance, minimum debt payments, transportation. The essentials you can't skip.",
+                                        color: "#FF6B35"
+                                    },
+                                    {
+                                        label: "WANTS (30%)",
+                                        value: "$1,050",
+                                        desc: "Dining out, hobbies, entertainment, gym, streaming services, travel. Life's too short to skip fun entirely.",
+                                        color: "#F7B801"
+                                    },
+                                    {
+                                        label: "SAVINGS (20%)",
+                                        value: "$700",
+                                        desc: "Emergency fund, retirement, investments, extra debt payments. This is how you build actual wealth.",
+                                        color: "#06A77D"
+                                    }
+                                ]
+                            },
+                            {
+                                type: "terms",
+                                title: "Budget Power Moves",
+                                terms: [
+                                    {
+                                        term: "Pay Yourself First",
+                                        definition: "Set up automatic transfer to savings on payday BEFORE you pay bills or spend anything. If you wait until the end of the month, there's never anything left."
+                                    },
+                                    {
+                                        term: "The Envelope System",
+                                        definition: "For categories where you overspend (eating out, shopping), withdraw cash and put it in envelopes. When it's gone, it's gone. Sounds old-school but it works."
+                                    },
+                                    {
+                                        term: "Zero-Based Budgeting",
+                                        definition: "Give every single dollar a job before the month starts. Income minus expenses should equal zero. Not leftover confusion, planned zeros."
+                                    },
+                                    {
+                                        term: "Budget Buffer",
+                                        definition: "Build a $500-1000 cushion in checking. Removes the stress of timing bills and prevents overdraft fees. Game changer for peace of mind."
+                                    }
+                                ]
+                            },
+                            {
+                                type: "text",
+                                content: "Real talk: Your first budget will be wrong. And that's fine. Month one is data collection. Month two you adjust. Month three you're getting close. By month six, you'll know your numbers cold and money stress drops dramatically. The goal isn't perfection - it's progress and awareness."
+                            }
+                        ]
+                    },
+                    {
+                        title: "Emergency Fund: Your Financial Shock Absorber",
+                        duration: "13 min",
+                        intro: "Car breaks down. Lose your job. Medical emergency. Fridge dies. These aren't 'if' scenarios - they're 'when.' An emergency fund is the difference between a bad day and financial catastrophe.",
+                        sections: [
+                            {
+                                type: "calculator",
+                                id: "emergency-calc",
+                                title: "Your Emergency Fund Target Calculator",
+                                inputs: [
+                                    { id: "monthly-expenses", label: "Monthly Expenses ($)", value: 2800, type: "number" },
+                                    { id: "months-coverage", label: "Months of Coverage", value: 6, type: "number" }
+                                ],
+                                calculate: (inputs) => {
+                                    const expenses = parseFloat(inputs['monthly-expenses']) || 0;
+                                    const months = parseFloat(inputs['months-coverage']) || 0;
+                                    const target = expenses * months;
+                                    const saveMonthly100 = Math.ceil(target / 100);
+                                    const saveMonthly200 = Math.ceil(target / 200);
+                                    const saveMonthly500 = Math.ceil(target / 500);
+                                    return {
+                                        yearly: expenses * 12,
+                                        target,
+                                        saveMonthly100,
+                                        saveMonthly200,
+                                        saveMonthly500
+                                    };
+                                }
+                            },
+                            {
+                                type: "comparison",
+                                title: "Building Speed: How Long to $16,800?",
+                                cards: [
+                                    {
+                                        label: "AGGRESSIVE",
+                                        value: "34 months",
+                                        desc: "Saving $500/month. Done in under 3 years. Financial security locked in.",
+                                        color: "#06A77D"
+                                    },
+                                    {
+                                        label: "MODERATE",
+                                        value: "84 months",
+                                        desc: "Saving $200/month. 7 years feels long, but you're building wealth while living life.",
+                                        color: "#F7B801"
+                                    },
+                                    {
+                                        label: "STARTER",
+                                        value: "168 months",
+                                        desc: "Saving $100/month. Takes 14 years, but way better than zero. Start somewhere.",
+                                        color: "#FF6B35"
+                                    }
+                                ]
+                            },
+                            {
+                                type: "terms",
+                                title: "Emergency Fund Strategy",
+                                terms: [
+                                    {
+                                        term: "The $1,000 Sprint",
+                                        definition: "Your first goal: Get $1,000 in the bank as fast as possible. This covers 80% of small emergencies - car repair, vet bill, broken appliance. Changes everything."
+                                    },
+                                    {
+                                        term: "High-Yield Savings Account",
+                                        definition: "Don't use regular savings at 0.01%. Online banks pay 4-5%. On $10,000, that's $400-500/year instead of $1. Free money for 10 minutes of work."
+                                    },
+                                    {
+                                        term: "True Emergency Definition",
+                                        definition: "Job loss, medical, urgent home/car repair, family emergency. NOT: sale at your favorite store, vacation, new iPhone, or 'I really want this.' Be honest."
+                                    },
+                                    {
+                                        term: "Tiered Approach",
+                                        definition: "Level 1: $1,000. Level 2: 1 month expenses. Level 3: 3 months. Level 4: 6 months. Build in stages so you see progress and don't get overwhelmed."
+                                    }
+                                ]
+                            },
+                            {
+                                type: "text",
+                                content: "True story: Sarah's transmission died - $2,400 repair. Without an emergency fund, she would've put it on a credit card at 22% interest, taking 3 years to pay off and costing $3,100 total. With her fund? Paid cash, no debt, no stress. That moment where she realized she could handle it without panic? That's what financial security actually feels like."
+                            }
+                        ]
+                    },
+                    {
+                        title: "Destroying Debt: The Complete System",
+                        duration: "16 min",
+                        intro: "Not all debt is evil, but high-interest debt is a wealth destroyer. Credit cards at 20-25% interest rates mean you're working for the bank instead of yourself. Time to flip the script.",
+                        sections: [
+                            {
+                                type: "calculator",
+                                id: "debt-calc",
+                                title: "Credit Card Payoff Calculator",
+                                inputs: [
+                                    { id: "balance", label: "Total Balance ($)", value: 5000, type: "number" },
+                                    { id: "interest-rate", label: "Interest Rate (%)", value: 22, type: "number" },
+                                    { id: "payment", label: "Monthly Payment ($)", value: 200, type: "number" }
+                                ],
+                                calculate: (inputs) => {
+                                    const balance = parseFloat(inputs['balance']) || 0;
+                                    const rate = parseFloat(inputs['interest-rate']) / 100 / 12 || 0;
+                                    const payment = parseFloat(inputs['payment']) || 0;
+                                    
+                                    let months = 0;
+                                    let totalPaid = 0;
+                                    let currentBalance = balance;
+                                    
+                                    while (currentBalance > 0 && months < 360) {
+                                        const interest = currentBalance * rate;
+                                        const principal = payment - interest;
+                                        currentBalance -= principal;
+                                        totalPaid += payment;
+                                        months++;
+                                    }
+                                    
+                                    const totalInterest = totalPaid - balance;
+                                    
+                                    return {
+                                        yearly: balance,
+                                        months,
+                                        totalPaid,
+                                        totalInterest
+                                    };
+                                }
+                            },
+                            {
+                                type: "comparison",
+                                title: "The True Cost: $5,000 at 22% Interest",
+                                cards: [
+                                    {
+                                        label: "MINIMUM PAYMENT",
+                                        value: "$150/mo",
+                                        desc: "Payoff time: 5+ years. Total interest paid: $3,500+. You pay $8,500 for a $5,000 balance. Brutal.",
+                                        color: "#FF6B35"
+                                    },
+                                    {
+                                        label: "AGGRESSIVE PAYMENT",
+                                        value: "$300/mo",
+                                        desc: "Payoff time: 20 months. Total interest: $900. You save $2,600 and years of your life.",
+                                        color: "#F7B801"
+                                    },
+                                    {
+                                        label: "DEBT-FREE INVESTING",
+                                        value: "$300/mo",
+                                        desc: "That same $300 invested at 8% for 30 years becomes $448,000. Debt keeps you poor.",
+                                        color: "#06A77D"
+                                    }
+                                ]
+                            },
+                            {
+                                type: "terms",
+                                title: "Debt Destruction Arsenal",
+                                terms: [
+                                    {
+                                        term: "Avalanche Method",
+                                        definition: "Pay minimums on everything, throw all extra money at highest interest rate debt first. Mathematically optimal - saves the most money. Best for logical thinkers."
+                                    },
+                                    {
+                                        term: "Snowball Method",
+                                        definition: "Pay minimums on everything, attack smallest balance first. Quick wins build momentum. Mathematically suboptimal but psychologically powerful. Best for motivation."
+                                    },
+                                    {
+                                        term: "Balance Transfer Hack",
+                                        definition: "Move high-interest debt to 0% intro rate cards (12-18 months). Requires discipline - no new charges, aggressive paydown. Can save thousands in interest."
+                                    },
+                                    {
+                                        term: "Debt Consolidation Loan",
+                                        definition: "Combine multiple high-rate debts into one lower-rate loan. Simplifies payments, reduces interest. Only works if you don't rack up new debt. Not a cure-all."
+                                    }
+                                ]
+                            },
+                            {
+                                type: "text",
+                                content: "The hard truth: If you're carrying credit card debt month-to-month, you're paying 20-25% interest while savings accounts pay 4-5%. You're literally losing 15-20% yearly. Before you invest a single dollar, kill the credit card debt. The 'return' on paying off 22% interest debt is a guaranteed 22% - better than any investment."
+                            }
+                        ]
+                    },
+                    {
+                        title: "Credit Score Mastery: 800+ Blueprint",
+                        duration: "15 min",
+                        intro: "Your credit score is a 300-850 number that determines whether you get approved for apartments, cars, mortgages, and what interest rates you pay. A 760+ score can save you $100,000+ over your lifetime. Let's build yours.",
+                        sections: [
+                            {
+                                type: "comparison",
+                                title: "Credit Score Impact: $300,000 Mortgage",
+                                cards: [
+                                    {
+                                        label: "EXCELLENT (760+)",
+                                        value: "3.5% rate",
+                                        desc: "Payment: $1,347/month. Total interest over 30 years: $185,000. You're rewarded for financial responsibility.",
+                                        color: "#06A77D"
+                                    },
+                                    {
+                                        label: "GOOD (700-759)",
+                                        value: "4.5% rate",
+                                        desc: "Payment: $1,520/month. Total interest: $247,000. Costs you $62,000 more for being 'good' instead of 'excellent.'",
+                                        color: "#F7B801"
+                                    },
+                                    {
+                                        label: "FAIR (620-699)",
+                                        value: "6.5% rate",
+                                        desc: "Payment: $1,896/month. Total interest: $383,000. You pay $198,000 MORE than excellent credit. Ouch.",
+                                        color: "#FF6B35"
+                                    }
+                                ]
+                            },
+                            {
+                                type: "terms",
+                                title: "The 5 Credit Score Factors",
+                                terms: [
+                                    {
+                                        term: "Payment History (35%)",
+                                        definition: "Biggest factor. Pay every bill on time, every time. One 30-day late payment can drop your score 100 points. Set up autopay for minimums as insurance against forgetfulness."
+                                    },
+                                    {
+                                        term: "Credit Utilization (30%)",
+                                        definition: "Keep total credit card balances under 30% of limits, under 10% is even better. Have $10,000 in total limits? Keep balances under $1,000. High utilization = desperate for credit = score drops."
+                                    },
+                                    {
+                                        term: "Credit History Length (15%)",
+                                        definition: "Average age of all accounts. Don't close old cards even if you don't use them - they boost your average age. Opening new cards drops your average. Time is your friend here."
+                                    },
+                                    {
+                                        term: "Credit Mix (10%)",
+                                        definition: "Having different types of credit (credit cards, car loan, mortgage, student loans) shows you can handle diverse obligations. Don't chase this - it's the smallest factor."
+                                    },
+                                    {
+                                        term: "New Credit (10%)",
+                                        definition: "Every application is a 'hard inquiry' that dings your score 5-10 points. Multiple inquiries in 2 weeks for same loan type (car, mortgage) count as one. Don't apply for credit cards constantly."
+                                    }
+                                ]
+                            },
+                            {
+                                type: "text",
+                                content: "Real case study: Jamie went from 620 to 760 in 18 months by: 1) Setting up autopay for everything (never missed a payment), 2) Paying down credit cards from 85% to 15% utilization, 3) Fixing one error on their report (disputed and won), 4) Not applying for new credit. Result? Refinanced mortgage and saved $285/month = $102,600 over 30 years. That's life-changing money for 18 months of discipline."
+                            },
+                            {
+                                type: "terms",
+                                title: "Advanced Credit Hacks",
+                                terms: [
+                                    {
+                                        term: "Authorized User Strategy",
+                                        definition: "Get added to a family member's old, well-managed card. Their positive history reports to your credit. Can boost score 50+ points instantly. Free credit building."
+                                    },
+                                    {
+                                        term: "Credit Limit Increase",
+                                        definition: "Request increases every 6-12 months on existing cards. Lowers utilization ratio without changing spending. $5,000 limit → $10,000 = instant improvement."
+                                    },
+                                    {
+                                        term: "Dispute Everything",
+                                        definition: "Check your report (AnnualCreditReport.com - official and free). See errors? Dispute them. Collections agencies must verify or delete. Many can't and items disappear. I've seen 100+ point jumps."
+                                    },
+                                    {
+                                        term: "Pay Twice Per Month",
+                                        definition: "Credit card companies report to bureaus once monthly. Pay down balance before statement closes so reported balance is lower. Utilization drops, score rises. Same spending, better score."
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            
+            money: {
+                title: "Growing Your Money",
+                subtitle: "Free • 4 deep lessons",
+                color: "#06A77D",
+                emoji: "🌱",
+                free: true,
+                lessons: [
+                    {
+                        title: "Why Your Savings Account is Losing Money",
+                        duration: "14 min",
+                        intro: "Here's the uncomfortable truth: If your money is sitting in a regular savings account earning 0.5% while inflation runs at 3%, you're losing 2.5% purchasing power every year. That 'safe' money is slowly becoming worthless.",
+                        sections: [
+                            {
+                                type: "calculator",
+                                id: "inflation-calc",
+                                title: "Inflation Destroyer Calculator",
+                                inputs: [
+                                    { id: "savings-amount", label: "Current Savings ($)", value: 10000, type: "number" },
+                                    { id: "years-hold", label: "Years to Hold", value: 20, type: "number" },
+                                    { id: "inflation-rate", label: "Inflation Rate (%)", value: 3, type: "number" }
+                                ],
+                                calculate: (inputs) => {
+                                    const amount = parseFloat(inputs['savings-amount']) || 0;
+                                    const years = parseFloat(inputs['years-hold']) || 0;
+                                    const inflation = parseFloat(inputs['inflation-rate']) / 100 || 0;
+                                    const purchasingPower = amount / Math.pow(1 + inflation, years);
+                                    const realLoss = amount - purchasingPower;
+                                    return { 
+                                        yearly: amount, 
+                                        purchasingPower: Math.round(purchasingPower),
+                                        realLoss: Math.round(realLoss)
+                                    };
+                                }
+                            },
+                            {
+                                type: "comparison",
+                                title: "The Real Cost of 'Playing It Safe'",
+                                cards: [
+                                    {
+                                        label: "SAVINGS @ 0.5%",
+                                        value: "$11,600",
+                                        desc: "$10K over 30 years. 'Safe' but barely grew. Lost massive purchasing power to inflation.",
+                                        color: "#FF6B35"
+                                    },
+                                    {
+                                        label: "BONDS @ 4%",
+                                        value: "$32,400",
+                                        desc: "Same $10K. Conservative but beats inflation. Real wealth preservation.",
+                                        color: "#F7B801"
+                                    },
+                                    {
+                                        label: "STOCKS @ 8%",
+                                        value: "$100,600",
+                                        desc: "Same $10K. Historical stock return. 10x your money. This is how wealth is built.",
+                                        color: "#06A77D"
+                                    }
+                                ]
+                            },
+                            {
+                                type: "terms",
+                                title: "Understanding Real Returns",
+                                terms: [
+                                    {
+                                        term: "Nominal Return",
+                                        definition: "What your account statement shows. 'I earned 5% this year!' But that's not the whole story..."
+                                    },
+                                    {
+                                        term: "Real Return",
+                                        definition: "Return minus inflation. If you earned 5% but inflation was 3%, your real return is only 2%. This is what actually matters."
+                                    },
+                                    {
+                                        term: "Inflation",
+                                        definition: "The silent wealth killer. Prices rise 2-3% yearly on average. Your money must grow faster than this or you're going backwards."
+                                    },
+                                    {
+                                        term: "Purchasing Power",
+                                        definition: "What your money can actually buy. $100 today buys what $58 bought 20 years ago. That's why 'safe' cash loses value."
+                                    }
+                                ]
+                            },
+                            {
+                                type: "text",
+                                content: "Sarah kept $50,000 in savings at 0.5% for 20 years. On paper, she has $55,230. But with 3% inflation, it has the buying power of $30,477 in today's dollars. She LOST $19,523 in purchasing power by 'playing it safe.' This is why cash is only for emergency funds—everything else must be invested."
+                            }
+                        ]
+                    },
+                    {
+                        title: "Investing 101: It's Not Gambling",
+                        duration: "16 min",
+                        intro: "Let's destroy the biggest myth: Investing is NOT gambling. When you buy stocks, you own real businesses—Apple, Microsoft, Amazon. When they profit, you profit. Over 100+ years, stocks average 10% annually. That's not luck, that's business growth.",
+                        sections: [
+                            {
+                                type: "calculator",
+                                id: "investment-growth-calc",
+                                title: "Your Investment Growth Calculator",
+                                inputs: [
+                                    { id: "monthly-invest", label: "Monthly Investment ($)", value: 300, type: "number" },
+                                    { id: "years-invest", label: "Years to Invest", value: 30, type: "number" },
+                                    { id: "annual-return", label: "Annual Return (%)", value: 8, type: "number" }
+                                ],
+                                calculate: (inputs) => {
+                                    const monthly = parseFloat(inputs['monthly-invest']) || 0;
+                                    const years = parseFloat(inputs['years-invest']) || 0;
+                                    const rate = parseFloat(inputs['annual-return']) / 100 / 12 || 0;
+                                    const months = years * 12;
+                                    const futureValue = monthly * (Math.pow(1 + rate, months) - 1) / rate;
+                                    const totalInvested = monthly * months;
+                                    const gains = futureValue - totalInvested;
+                                    return { 
+                                        yearly: monthly * 12, 
+                                        futureValue: Math.round(futureValue), 
+                                        totalInvested: Math.round(totalInvested), 
+                                        gains: Math.round(gains) 
+                                    };
+                                }
+                            },
+                            {
+                                type: "comparison",
+                                title: "The Time Advantage: Start Now vs Wait 10 Years",
+                                cards: [
+                                    {
+                                        label: "START AT 25",
+                                        value: "$1,036,000",
+                                        desc: "$300/mo for 40 years at 8%. Total invested: $144K. Gains: $892K. Time is your superpower.",
+                                        color: "#06A77D"
+                                    },
+                                    {
+                                        label: "START AT 35",
+                                        value: "$449,000",
+                                        desc: "$300/mo for 30 years at 8%. Total invested: $108K. Gains: $341K. Wait = $587K less!",
+                                        color: "#F7B801"
+                                    },
+                                    {
+                                        label: "START AT 45",
+                                        value: "$176,000",
+                                        desc: "$300/mo for 20 years at 8%. Total invested: $72K. Gains: $104K. The cost of waiting is brutal.",
+                                        color: "#FF6B35"
+                                    }
+                                ]
+                            },
+                            {
+                                type: "terms",
+                                title: "Investment Fundamentals",
+                                terms: [
+                                    {
+                                        term: "Stocks (Equities)",
+                                        definition: "Ownership in companies. You own a tiny piece of Apple, Tesla, whatever. When the company profits and grows, your shares become more valuable. Higher risk, higher returns (historically 10%/year)."
+                                    },
+                                    {
+                                        term: "Index Funds",
+                                        definition: "The cheat code. Buy one fund, own 500+ companies instantly. S&P 500 index = top 500 US companies. Boring, simple, beats 90% of professional investors. This is what Warren Buffett recommends."
+                                    },
+                                    {
+                                        term: "Dollar-Cost Averaging",
+                                        definition: "Invest the same amount monthly, regardless of price. When market's high, you buy fewer shares. When it crashes, you buy MORE shares cheap. This is why market crashes are your friend when you're young."
+                                    },
+                                    {
+                                        term: "Compound Interest",
+                                        definition: "Einstein called it the 8th wonder of the world. You earn returns on your returns. Year 1: 8% on $10K = $800. Year 2: 8% on $10,800 = $864. The snowball effect accelerates over decades."
+                                    }
+                                ]
+                            },
+                            {
+                                type: "text",
+                                content: "Marcus invests $300/month starting at age 25. His friend Jake waits until 35, then invests the SAME $300/month. At 65: Marcus has $1,036,000. Jake has $449,000. Marcus invested only $36,000 MORE ($300 × 120 months), but ended with $587,000 MORE. That's the power of time and compound interest. The best time to start was 10 years ago. The second-best time is TODAY."
+                            }
+                        ]
+                    },
+                    {
+                        title: "Retirement: The $1 Million Question",
+                        duration: "15 min",
+                        intro: "How much do you need to retire? Most people guess wrong by hundreds of thousands. The answer: 25x your annual expenses. Want to spend $40K/year? You need $1M. Want $80K/year? You need $2M. Let's build YOUR number.",
+                        sections: [
+                            {
+                                type: "calculator",
+                                id: "retirement-calc",
+                                title: "Your Retirement Number Calculator",
+                                inputs: [
+                                    { id: "annual-expenses", label: "Desired Annual Spending ($)", value: 60000, type: "number" },
+                                    { id: "current-age", label: "Current Age", value: 30, type: "number" },
+                                    { id: "retire-age", label: "Retirement Age", value: 65, type: "number" }
+                                ],
+                                calculate: (inputs) => {
+                                    const expenses = parseFloat(inputs['annual-expenses']) || 0;
+                                    const currentAge = parseFloat(inputs['current-age']) || 0;
+                                    const retireAge = parseFloat(inputs['retire-age']) || 0;
+                                    const fiNumber = expenses * 25;
+                                    const yearsToRetire = retireAge - currentAge;
+                                    const monthlyNeeded = fiNumber / (yearsToRetire * 12 * 1.49);
+                                    return { 
+                                        yearly: expenses, 
+                                        fiNumber, 
+                                        yearsToRetire, 
+                                        monthlyNeeded: Math.round(monthlyNeeded) 
+                                    };
+                                }
+                            },
+                            {
+                                type: "comparison",
+                                title: "The 401(k) Match: Free Money You're Ignoring?",
+                                cards: [
+                                    {
+                                        label: "NO MATCH",
+                                        value: "$0",
+                                        desc: "You contribute nothing. Company contributes nothing. You're leaving free money on the table. This is insane.",
+                                        color: "#FF6B35"
+                                    },
+                                    {
+                                        label: "PARTIAL MATCH",
+                                        value: "$1,200/year",
+                                        desc: "You contribute 2%, company matches 2%. On $60K salary = $1,200 free. Better than nothing, but...",
+                                        color: "#F7B801"
+                                    },
+                                    {
+                                        label: "FULL MATCH",
+                                        value: "$2,400/year",
+                                        desc: "You contribute 4%, company matches 4%. That's $2,400 FREE = instant 100% return. Over 30 years at 7% = $228K!",
+                                        color: "#06A77D"
+                                    }
+                                ]
+                            },
+                            {
+                                type: "terms",
+                                title: "Retirement Account Power Tools",
+                                terms: [
+                                    {
+                                        term: "401(k)",
+                                        definition: "Employer retirement account. Pre-tax contributions (save on taxes now). Contribution limit: $23,000/year. If employer matches, this is your FIRST investment priority. Not taking the match = rejecting a 100% guaranteed return."
+                                    },
+                                    {
+                                        term: "Roth IRA",
+                                        definition: "You pay taxes now, never again. Max $7,000/year. Growth is 100% tax-free forever. At retirement, withdraw tax-free. This is the best deal in finance for young people in lower tax brackets."
+                                    },
+                                    {
+                                        term: "The 4% Rule",
+                                        definition: "Withdraw 4% of your portfolio yearly in retirement. If you have $1M, you can safely withdraw $40K/year and never run out. This is why your FI number = annual expenses × 25."
+                                    },
+                                    {
+                                        term: "Traditional IRA",
+                                        definition: "Like 401(k) - tax break now, pay taxes later. Use this if you're in a high tax bracket now. Max $7,000/year. Good for those earning $100K+ who need current tax deductions."
+                                    }
+                                ]
+                            },
+                            {
+                                type: "text",
+                                content: "Your company offers 4% 401(k) match. You make $60,000. If you contribute 4% ($2,400/year), they add $2,400 FREE. That's instant 100% return before any market gains. Over 30 years at 7% growth, just that match money becomes $228,000. Not taking the match is literally rejecting free money. Then max your Roth IRA ($7K/year). Between 401k and Roth, you're investing $16,200/year and building serious wealth."
+                            }
+                        ]
+                    },
+                    {
+                        title: "Your 90-Day Wealth Building Sprint",
+                        duration: "12 min",
+                        intro: "You've learned the fundamentals. Now it's time to actually DO it. This 90-day plan will transform your finances faster than you thought possible. Most people who follow this increase their net worth by $5,000-20,000 in just 90 days.",
+                        sections: [
+                            {
+                                type: "terms",
+                                title: "Week-by-Week Action Plan",
+                                terms: [
+                                    {
+                                        term: "Weeks 1-2: Foundation",
+                                        definition: "Track ALL expenses for 14 days. Create 50/30/20 budget. Open high-yield savings. Transfer first $500-1,000 to emergency fund. Set up automatic savings on payday. Reality check: Where is money ACTUALLY going?"
+                                    },
+                                    {
+                                        term: "Weeks 3-4: Debt Attack",
+                                        definition: "List all debts with interest rates. Choose avalanche or snowball method. Call credit cards, negotiate lower rates (you'd be surprised how often this works). Set up autopay for all minimums. Find $200 extra, make first aggressive payment."
+                                    },
+                                    {
+                                        term: "Weeks 5-6: Start Investing",
+                                        definition: "Enroll in 401(k) (or increase contribution 1%). Open Roth IRA. Make first IRA contribution ($100+). Choose simple index funds. Set up automatic monthly contributions. You're now officially building wealth."
+                                    },
+                                    {
+                                        term: "Weeks 7-8: Optimize",
+                                        definition: "Request credit limit increases (lowers utilization). Pay high-balance cards under 30%. Cancel 2+ unused subscriptions. Check credit report, dispute any errors. Review all insurance - could you save 15% switching?"
+                                    },
+                                    {
+                                        term: "Weeks 9-10: Boost Income",
+                                        definition: "Research 3 side hustle options. Start ONE. Sell unused stuff (goal: $500). Ask boss for raise/promotion meeting. Bank ALL side income directly to investments or debt payoff. Track every extra dollar earned."
+                                    },
+                                    {
+                                        term: "Weeks 11-12: Review & Accelerate",
+                                        definition: "Calculate 90-day net worth change (celebrate!). Find $100+ more monthly to save. Increase 401k or IRA contribution. Plan next 90-day sprint. Share wins with accountability partner. Small treat (<$50) to celebrate."
+                                    }
+                                ]
+                            },
+                            {
+                                type: "text",
+                                content: "The secret to financial transformation isn't one big decision—it's small consistent actions compounded over time. Track your net worth weekly. Every Sunday, calculate: Assets (savings, investments, retirement) minus Liabilities (debts). Watch that number climb. First $1,000 increase? Celebrate. First debt paid off? Call someone who supports you. Hit your 90-day goal? You've just proven to yourself that you CAN do this. Most people never start. You're different. You're on the path."
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        function render() {
+            const module = courseData[state.activeModule];
+            const lesson = module.lessons[state.activeLesson];
+
+            document.getElementById('app').innerHTML = `
+                <div class="app">
+                    ${renderSidebar()}
+                    ${renderMain(module, lesson)}
+                </div>
+            `;
+
+            attachEventListeners();
+        }
+
+        function renderSidebar() {
+            return `
+                <div class="sidebar">
+                    <div class="brand">
+                        <h1>Wealth Path</h1>
+                        <p>Paycheck to Portfolio — Transform your finances in 90 days</p>
+                    </div>
+                    <div class="modules">
+                        ${Object.entries(courseData).map(([key, mod]) => renderModule(key, mod)).join('')}
+                    </div>
+                    
+                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <h3 style="color: var(--accent); font-size: 0.95rem; margin-bottom: 1rem; font-weight: 700;">📥 PDF TOOLKITS</h3>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <a href="WealthPath-01-30-Day-Expense-Tracker.pdf" download style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                                📅 Expense Tracker
+                            </a>
+                            <a href="WealthPath-02-50-30-20-Budget-Worksheet.pdf" download style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                                💰 Budget Worksheet
+                            </a>
+                            <a href="WealthPath-03-Emergency-Fund-Tracker.pdf" download style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                                🛡️ Emergency Fund
+                            </a>
+                            <a href="WealthPath-04-Debt-Payoff-Planner.pdf" download style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                                ⚡ Debt Planner
+                            </a>
+                            <a href="WealthPath-05-Credit-Score-Action-Plan.pdf" download style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                                📈 Credit Score Plan
+                            </a>
+                            <a href="WealthPath-06-Investment-Account-Setup-Checklist.pdf" download style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                                🎯 Investment Setup
+                            </a>
+                            <a href="WealthPath-07-Retirement-Projection-Workbook.pdf" download style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                                🏖️ Retirement Projector
+                            </a>
+                            <a href="WealthPath-08-90-Day-Wealth-Sprint.pdf" download style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                                🚀 90-Day Sprint
+                            </a>
+                            <a href="WealthPath-09-Tax-Deduction-Checklist.pdf" download style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                                📋 Tax Deductions
+                            </a>
+                            <a href="WealthPath-10-Business-Expense-Tracker.pdf" download style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                                💼 Business Tracker
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderModule(key, module) {
+            const isActive = state.activeModule === key;
+            const isLocked = !module.free && !state.unlockedModules.includes(key);
+            const completed = state.completedLessons.filter(l => l.startsWith(key)).length;
+            const total = module.lessons.length;
+            const progress = (completed / total) * 100;
+
+            return `
+                <div class="module ${isActive ? 'active' : ''} ${isLocked ? 'locked' : ''}" 
+                     style="--module-color: ${module.color}"
+                     onclick="selectModule('${key}', ${isLocked})">
+                    ${module.badge ? `<div class="module-badge">${module.badge}</div>` : ''}
+                    <div class="module-header">
+                        <div class="module-icon">${module.emoji}</div>
+                        <div class="module-info">
+                            <h3>${module.title}</h3>
+                            <p>${module.subtitle}</p>
+                        </div>
+                    </div>
+                    ${!isLocked ? `
+                        <div class="progress-wrapper">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progress}%"></div>
+                            </div>
+                            <div class="lesson-count">${completed} of ${total} complete</div>
+                        </div>
+                    ` : `
+                        <div class="price-tag">
+                            <span>🔒</span>
+                            ${module.price || '$29'}
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        function renderMain(module, lesson) {
+            const currentLessonIndex = state.activeLesson;
+            const totalLessons = module.lessons.length;
+            const hasPrev = currentLessonIndex > 0;
+            const hasNext = currentLessonIndex < totalLessons - 1;
+
+            return `
+                <div class="main">
+                    ${totalLessons > 1 ? `
+                        <div class="lesson-nav">
+                            <button class="nav-btn ${!hasPrev ? 'disabled' : ''}" 
+                                    onclick="${hasPrev ? 'prevLesson()' : 'return false'}"
+                                    ${!hasPrev ? 'disabled' : ''}>
+                                ← Previous Lesson
+                            </button>
+                            <div class="lesson-progress">
+                                Lesson ${currentLessonIndex + 1} of ${totalLessons}
+                            </div>
+                            <button class="nav-btn ${!hasNext ? 'disabled' : ''}"
+                                    onclick="${hasNext ? 'nextLesson()' : 'return false'}"
+                                    ${!hasNext ? 'disabled' : ''}>
+                                Next Lesson →
+                            </button>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="lesson">
+                        <div class="lesson-header">
+                            <div class="lesson-meta">
+                                <div class="meta-badge">
+                                    <span>⏱</span>
+                                    ${lesson.duration}
+                                </div>
+                                <div class="meta-badge">
+                                    <span>${module.emoji}</span>
+                                    ${module.title}
+                                </div>
+                            </div>
+                            <h2>${lesson.title}</h2>
+                            <p class="lesson-intro">${lesson.intro}</p>
+                        </div>
+
+                        ${lesson.sections.map(section => renderSection(section)).join('')}
+
+                        <button class="cta-btn" onclick="completeLesson()">
+                            <span>${hasNext ? 'Complete & Continue →' : 'Complete Lesson ✓'}</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSection(section) {
+            switch(section.type) {
+                case 'text':
+                    return `
+                        <div class="content-section">
+                            <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary);">
+                                ${section.content}
+                            </p>
+                        </div>
+                    `;
+                
+                case 'promise':
+                    return `
+                        <div class="content-section">
+                            <h3 class="section-title">${section.title}</h3>
+                            <div class="term-grid">
+                                ${section.points.map(point => `
+                                    <div class="term-card">
+                                        <div class="term-name">✓</div>
+                                        <div class="term-definition">${point}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                
+                case 'calculator':
+                    return `
+                        <div class="content-section">
+                            <div class="interactive-calc">
+                                <div class="calc-header">
+                                    <div class="calc-icon">🧮</div>
+                                    <div class="calc-title">${section.title}</div>
+                                </div>
+                                <div class="calc-inputs">
+                                    ${section.inputs.map(input => `
+                                        <div class="input-group">
+                                            <label>${input.label}</label>
+                                            <input type="${input.type}" 
+                                                   id="${input.id}" 
+                                                   value="${input.value}"
+                                                   onchange="updateCalculator('${section.id}')">
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <div class="calc-result" id="result-${section.id}">
+                                    <div class="result-label">Annual Cost</div>
+                                    <div class="result-value">$0</div>
+                                    <div class="result-subtitle">Calculate to see the impact</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                
+                case 'comparison':
+                    return `
+                        <div class="content-section">
+                            <h3 class="section-title">${section.title}</h3>
+                            <div class="comparison">
+                                ${section.cards.map(card => `
+                                    <div class="comparison-card" style="--card-color: ${card.color}">
+                                        <div class="comparison-label">${card.label}</div>
+                                        <div class="comparison-value">${card.value}</div>
+                                        <div class="comparison-desc">${card.desc}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                
+                case 'terms':
+                    return `
+                        <div class="content-section">
+                            <h3 class="section-title">${section.title}</h3>
+                            <div class="term-grid">
+                                ${section.terms.map(t => `
+                                    <div class="term-card">
+                                        <div class="term-name">${t.term}</div>
+                                        <div class="term-definition">${t.definition}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                
+                default:
+                    return '';
+            }
+        }
+
+        function selectModule(key, isLocked) {
+            if (isLocked) {
+                alert('This module is part of the premium course. Unlock it to continue!');
+                return;
+            }
+            state.activeModule = key;
+            state.activeLesson = 0;
+            saveState();
+            render();
+            window.scrollTo(0, 0);
+        }
+
+        function saveState() {
+            localStorage.setItem('wealthPathState', JSON.stringify(state));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('wealthPathState');
+            if (saved) {
+                const loaded = JSON.parse(saved);
+                state.activeModule = loaded.activeModule || 'welcome';
+                state.activeLesson = loaded.activeLesson || 0;
+                state.completedLessons = loaded.completedLessons || [];
+                state.unlockedModules = loaded.unlockedModules || [];
+            }
+        }
+
+        function completeLesson() {
+            const lessonId = `${state.activeModule}-${state.activeLesson}`;
+            if (!state.completedLessons.includes(lessonId)) {
+                state.completedLessons.push(lessonId);
+            }
+
+            const module = courseData[state.activeModule];
+            if (state.activeLesson < module.lessons.length - 1) {
+                state.activeLesson++;
+                saveState();
+                render();
+                window.scrollTo(0, 0);
+            } else {
+                // Completed all lessons in this module - try to advance to next module
+                const moduleKeys = Object.keys(courseData);
+                const currentIndex = moduleKeys.indexOf(state.activeModule);
+                
+                if (currentIndex < moduleKeys.length - 1) {
+                    const nextModuleKey = moduleKeys[currentIndex + 1];
+                    const nextModule = courseData[nextModuleKey];
+                    
+                    if (nextModule.free || state.unlockedModules.includes(nextModuleKey)) {
+                        // Next module is available, go to it
+                        state.activeModule = nextModuleKey;
+                        state.activeLesson = 0;
+                        saveState();
+                        render();
+                        window.scrollTo(0, 0);
+                    } else {
+                        // Next module is locked
+                        alert('🎉 Module complete! The next module is premium content. Upgrade to continue!');
+                    }
+                } else {
+                    // Completed the entire course
+                    alert('🎉 Congratulations! You\'ve completed all available lessons!');
+                }
+            }
+        }
+
+        function nextLesson() {
+            const module = courseData[state.activeModule];
+            if (state.activeLesson < module.lessons.length - 1) {
+                state.activeLesson++;
+                saveState();
+                render();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function prevLesson() {
+            if (state.activeLesson > 0) {
+                state.activeLesson--;
+                saveState();
+                render();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function updateCalculator(calcId) {
+            const module = courseData[state.activeModule];
+            const lesson = module.lessons[state.activeLesson];
+            const calc = lesson.sections.find(s => s.id === calcId);
+            
+            if (!calc) return;
+
+            const inputs = {};
+            calc.inputs.forEach(input => {
+                const element = document.getElementById(input.id);
+                if (element) {
+                    inputs[input.id] = element.value;
+                }
+            });
+
+            const result = calc.calculate(inputs);
+            const resultDiv = document.getElementById(`result-${calcId}`);
+            
+            if (!resultDiv) return;
+
+            // Custom result formatting based on calculator type
+            if (calcId === 'coffee-calc') {
+                resultDiv.innerHTML = `
+                    <div class="result-label">Your Numbers</div>
+                    <div class="result-value">$${Math.round(result.yearly).toLocaleString()}</div>
+                    <div class="result-subtitle">Per year | $${Math.round(result.tenYear).toLocaleString()} over 10 years</div>
+                    <div class="result-subtitle" style="margin-top: 1rem; color: var(--success); font-size: 1.1rem;">
+                        <strong>If invested at 8%: $${Math.round(result.invested).toLocaleString()}</strong>
+                    </div>
+                `;
+            } else if (calcId === 'budget-calc') {
+                resultDiv.innerHTML = `
+                    <div class="result-label">Your Budget Breakdown</div>
+                    <div class="result-value">$${Math.round(result.needs).toLocaleString()}</div>
+                    <div class="result-subtitle">
+                        Needs: $${Math.round(result.needs).toLocaleString()} | 
+                        Wants: $${Math.round(result.wants).toLocaleString()} | 
+                        Savings: $${Math.round(result.savings).toLocaleString()}
+                    </div>
+                    <div class="result-subtitle" style="margin-top: 1rem; color: var(--success);">
+                        <strong>You'll save $${Math.round(result.savingsYear).toLocaleString()} this year!</strong>
+                    </div>
+                `;
+            } else if (calcId === 'emergency-calc') {
+                resultDiv.innerHTML = `
+                    <div class="result-label">Your Emergency Fund Target</div>
+                    <div class="result-value">$${Math.round(result.target).toLocaleString()}</div>
+                    <div class="result-subtitle">
+                        ${result.months} months of expenses protected
+                    </div>
+                    <div class="result-subtitle" style="margin-top: 1rem;">
+                        Save $500/mo = ${Math.ceil(result.target / 500)} months to reach goal
+                    </div>
+                `;
+            } else if (calcId === 'debt-calc') {
+                resultDiv.innerHTML = `
+                    <div class="result-label">Payoff Timeline</div>
+                    <div class="result-value">${result.months} months</div>
+                    <div class="result-subtitle">
+                        Total paid: $${Math.round(result.totalPaid).toLocaleString()}
+                    </div>
+                    <div class="result-subtitle" style="margin-top: 1rem; color: var(--primary);">
+                        <strong>Interest cost: $${Math.round(result.totalInterest).toLocaleString()}</strong>
+                    </div>
+                `;
+            } else if (calcId === 'inflation-calc') {
+                resultDiv.innerHTML = `
+                    <div class="result-label">Inflation Impact</div>
+                    <div class="result-value">$${result.purchasingPower.toLocaleString()}</div>
+                    <div class="result-subtitle">
+                        Real purchasing power after ${inputs['years-hold']} years
+                    </div>
+                    <div class="result-subtitle" style="margin-top: 1rem; color: var(--primary);">
+                        <strong>You LOSE $${result.realLoss.toLocaleString()} to inflation</strong>
+                    </div>
+                `;
+            } else if (calcId === 'investment-growth-calc') {
+                resultDiv.innerHTML = `
+                    <div class="result-label">Your Investment Future</div>
+                    <div class="result-value">$${result.futureValue.toLocaleString()}</div>
+                    <div class="result-subtitle">
+                        You invested: $${result.totalInvested.toLocaleString()}
+                    </div>
+                    <div class="result-subtitle" style="margin-top: 1rem; color: var(--success); font-size: 1.1rem;">
+                        <strong>Gains: $${result.gains.toLocaleString()}</strong>
+                    </div>
+                `;
+            } else if (calcId === 'retirement-calc') {
+                resultDiv.innerHTML = `
+                    <div class="result-label">Your FI Number</div>
+                    <div class="result-value">$${result.fiNumber.toLocaleString()}</div>
+                    <div class="result-subtitle">
+                        Need this to spend $${result.yearly.toLocaleString()}/year (4% rule)
+                    </div>
+                    <div class="result-subtitle" style="margin-top: 1rem;">
+                        ${result.yearsToRetire} years to retirement | Save ~$${result.monthlyNeeded.toLocaleString()}/month
+                    </div>
+                `;
+            }
+        }
+
+        function attachEventListeners() {
+            const module = courseData[state.activeModule];
+            const lesson = module.lessons[state.activeLesson];
+            lesson.sections.forEach(section => {
+                if (section.type === 'calculator') {
+                    setTimeout(() => updateCalculator(section.id), 100);
+                }
+            });
+        }
+
+        // Initialize
+        loadState();
+        render();
+    </script>
+
+
+</body></html>
